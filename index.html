@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI音声合成サービス比較</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #16a085;
+            margin-top: 20px;
+        }
+        .audio-item {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .audio-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        audio {
+            width: 100%;
+        }
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+        }
+        .folder {
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin: 20px 0;
+        }
+        /* 音声スクリプト用のスタイル */
+        .voice-script {
+            position: relative;
+            background: linear-gradient(135deg, #f6f8f9 0%, #e5ebee 100%);
+            border-radius: 12px;
+            padding: 25px 30px;
+            margin: 30px 0;
+            font-size: 1.1em;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .voice-script:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-left-width: 8px;
+        }
+        .voice-script::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 10px;
+            font-size: 100px;
+            color: rgba(52, 152, 219, 0.1);
+            font-family: Georgia, serif;
+        }
+        .voice-icon {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 24px;
+            color: #3498db;
+            vertical-align: middle;
+        }
+        .voice-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        .voice-play-status {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-left: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .show-status {
+            opacity: 1;
+        }
+        @keyframes highlight {
+            0% { background-color: rgba(52, 152, 219, 0.1); }
+            100% { background-color: transparent; }
+        }
+        .highlight-text {
+            line-height: 1.8;
+            animation: highlight 2s ease-out;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        .voice-controls {
+            display: flex;
+            margin-top: 15px;
+            gap: 15px;
+        }
+        .voice-control-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .voice-control-btn:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+        .hidden-audio {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>AI音声合成サービス比較</h1>
+    
+    <div class="section">
+        <h3>現在の日本の主要AI音声サービス3種類</h3>
+        <ul>
+            <li><strong>実績重視: CoeFont系</strong> - AIひろゆきやAIホリエモンなど著名人ボイスで有名。声は少し機械的なアナウンス系</li>
+            <li><strong>機能・音質重視: にじボイス</strong> - 音質や感情表現が高品質だが、アニメ系に寄っている</li>
+            <li><strong>リアルさ重視: Fish</strong> - リアルな音声を再現できるが、感情表現や抑揚の精度が安定しない</li>
+        </ul>
+    </div>
+    
+    <div class="voice-script" id="voice-script">
+        <div class="voice-title">
+            <span class="voice-icon">🎙️</span>音声サンプルのスクリプト
+            <span class="voice-play-status" id="play-status">♪ 再生中...</span>
+        </div>
+        <p class="highlight-text" id="script-text">
+            朝の商店街。私は、真新しい、瞬熱マグボトルを、高々と掲げて叫ぶ。「6時間キープ、しかも片手でワンプッシュ！」通勤客が足を止める。「さらに、今週はフィルター付き替え蓋をお付けします！」拍手が起こり、背後の在庫箱が、次々と空になっていく。やったー！
+        </p>
+        <div class="voice-controls">
+            <button class="voice-control-btn" id="play-coe">
+                <span style="margin-right:5px;">▶</span> CoeFont で再生
+            </button>
+            <button class="voice-control-btn" id="play-niji">
+                <span style="margin-right:5px;">▶</span> にじボイスで再生
+            </button>
+            <button class="voice-control-btn" id="play-fish">
+                <span style="margin-right:5px;">▶</span> Fishで再生
+            </button>
+
+        </div>
+        <audio id="niji-audio" class="hidden-audio" src="音声/にじボイス/+voice_breath朝の商店街私は真新_蘭華.mp3"></audio>
+        <audio id="fish-audio" class="hidden-audio" src="音声/fish/+[松本梨香（若い頃）](brea......)やったー.mp3"></audio>
+        <audio id="coe-audio" class="hidden-audio" src="音声/coeフォント/+0_0_朝の商店街 (1).wav"></audio>
+    </div>
+    
+    <div class="section">
+        <h3>おすすめ音声サンプル</h3>
+        <p>	•	著名人の声や実績、手動調整による安定性を求めるなら「CoeFont系」、<br>
+            •	自動感情表現でナレーションやアニメ系に適した高品質な音声が欲しいなら「にじボイス」、<br>
+            •	吐息まで再現できるリアルな会話調が欲しいなら「Fish系」<br>
+            <br>
+        という基準で、まず「どのタイプのサービスを使うか」を決定し、その後で具体的な音声を選ぶのが最も効率的です。
+    <br>
+    <br>
+    <h2>個人的なおすすとしてFish系の会話バージョンを特別にサンプリングしています。</h2>
+    </p>
+        
+        
+        <div class="audio-item">
+            <div class="audio-title">fish - 会話</div>
+            <audio controls src="音声/fish/+[03 AI アナウンサー](brea......ましたー！.mp3"></audio>
+        </div>
+        
+
+    </div>
+    
+    <div class="section">
+        <h2>サービス別 音声サンプル（一部）</h2>
+    </div>    
+        <div class="folder">
+            <h3>CoeFont (実績重視型)</h3>
+            <p>国内での実績は圧倒的に多いが、機械的な印象が強いAI音声</p>
+            
+            <div class="audio-item">
+                <div class="audio-title">CoeFont - 音声1</div>
+                <audio controls src="音声/coeフォント/0_0_朝の商店街.wav"></audio>
+            </div>
+            
+            <div class="audio-item">
+                <div class="audio-title">CoeFont - 音声2</div>
+                <audio controls src="音声/coeフォント/0_0_朝の商店街 (2).wav"></audio>
+            </div>
+            
+            <div class="audio-item">
+                <div class="audio-title">CoeFont - 音声3</div>
+                <audio controls src="音声/coeフォント/+0_0_朝の商店街 (1).wav"></audio>
+            </div>
+        </div>
+<br>
+        
+        <div class="folder">
+            <h3>にじボイス (機能・音質重視型)</h3>
+            <p>音質や感情表現が高品質だが、声質がアニメ系またはアナウンス系に寄っている</p>
+            
+            <div class="audio-item">
+                <div class="audio-title">にじボイス - 音声1</div>
+                <audio controls src="音声/にじボイス/voice_breath朝の商店街私は真新_深海 結涼.mp3"></audio>
+            </div>
+            
+            <div class="audio-item">
+                <div class="audio-title">にじボイス - 音声2</div>
+                <audio controls src="音声/にじボイス/voice_breath朝の商店街私は真新_エヴァニア・ノクターン.mp3"></audio>
+            </div>
+            
+            <div class="audio-item">
+                <div class="audio-title">にじボイス - 音声3</div>
+                <audio controls src="音声/にじボイス/+voice_breath朝の商店街私は真新_蘭華.mp3"></audio>
+            </div>
+        </div>
+        <br>
+        <div class="folder">
+            <h3>Fish (リアルさ重視型)</h3>
+            <p>吐息（ブレス）まで再現できるリアルな音声だが、感情表現や抑揚の精度が安定しない</p>
+            
+            <div class="audio-item">
+                <div class="audio-title">Fish - 音声1</div>
+                <audio controls src="音声/fish/[白上フブキ(しらかみふぶき)](brea......)やったー.mp3"></audio>
+            </div>
+            
+            <div class="audio-item">
+                <div class="audio-title">Fish - 音声2</div>
+                <audio controls src="音声/fish/[声ピタ](brea......)やったー.mp3"></audio>
+            </div>
+            
+            <div class="audio-item">
+                <div class="audio-title">Fish - 音声3</div>
+                <audio controls src="音声/fish/[七海みなみv2](brea......)やったー.mp3"></audio>
+            </div>
+            
+            <div class="audio-item">
+                <div class="audio-title">Fish - 音声4</div>
+                <audio controls src="音声/fish/[ヨル・フォージャー](brea......)やったー.mp3"></audio>
+            </div>
+            
+            <div class="audio-item">
+                <div class="audio-title">Fish - 音声5</div>
+                <audio controls src="音声/fish/[エミリア](brea......)やったー.mp3"></audio>
+            </div>
+            
+            <div class="audio-item">
+                <div class="audio-title">Fish - 音声6</div>
+                <audio controls src="音声/fish/[まな](brea......)やったー.mp3"></audio>
+            </div>
+            
+            <div class="audio-item">
+                <div class="audio-title">Fish - 音声7</div>
+                <audio controls src="音声/fish/[すず](brea......)やったー.mp3"></audio>
+            </div>
+            
+            <div class="audio-item">
+                <div class="audio-title">Fish - 音声8</div>
+                <audio controls src="音声/fish/[かすちゃん](brea......)やったー.mp3"></audio>
+            </div>
+            
+            <div class="audio-item">
+                <div class="audio-title">Fish - 音声9</div>
+                <audio controls src="音声/fish/[えほん](brea......)やったー.mp3"></audio>
+            </div>
+            
+            <div class="audio-item">
+                <div class="audio-title">Fish - 音声10</div>
+                <audio controls src="音声/fish/[03 AI アナウンサー](brea......)やったー.mp3"></audio>
+            </div>
+            
+            <div class="audio-item">
+                <div class="audio-title">Fish - 音声11</div>
+                <audio controls src="音声/fish/+[松本梨香（若い頃）](brea......)やったー.mp3"></audio>
+            </div>
+            
+            <div class="audio-item">
+                <div class="audio-title">Fish - 音声12</div>
+                <audio controls src="音声/fish/+[03 AI アナウンサー](brea......ましたー！.mp3"></audio>
+            </div>
+        </div>
+        
+
+    
+   
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const nijiAudio = document.getElementById('niji-audio');
+        const fishAudio = document.getElementById('fish-audio');
+        const coeAudio = document.getElementById('coe-audio');
+        const playStatus = document.getElementById('play-status');
+        const scriptText = document.getElementById('script-text');
+        
+        // にじボイス再生ボタン
+        document.getElementById('play-niji').addEventListener('click', function(e) {
+            e.stopPropagation();
+            stopAllAudio();
+            nijiAudio.play();
+            playStatus.textContent = '♪ にじボイスで再生中...';
+            playStatus.classList.add('show-status');
+            highlightText();
+        });
+        
+        // Fish再生ボタン
+        document.getElementById('play-fish').addEventListener('click', function(e) {
+            e.stopPropagation();
+            stopAllAudio();
+            fishAudio.play();
+            playStatus.textContent = '♪ Fishで再生中...';
+            playStatus.classList.add('show-status');
+            highlightText();
+        });
+        
+        // CoeFont再生ボタン
+        document.getElementById('play-coe').addEventListener('click', function(e) {
+            e.stopPropagation();
+            stopAllAudio();
+            coeAudio.play();
+            playStatus.textContent = '♪ CoeFontで再生中...';
+            playStatus.classList.add('show-status');
+            highlightText();
+        });
+        
+        // 全体のスクリプトエリアをクリックしたときにランダム再生
+        document.getElementById('voice-script').addEventListener('click', function() {
+            const audios = [nijiAudio, fishAudio, coeAudio];
+            const titles = ['にじボイス', 'Fish', 'CoeFont'];
+            const randomIndex = Math.floor(Math.random() * audios.length);
+            
+            stopAllAudio();
+            audios[randomIndex].play();
+            playStatus.textContent = `♪ ${titles[randomIndex]}で再生中...`;
+            playStatus.classList.add('show-status');
+            highlightText();
+        });
+        
+        // 全ての音声を停止する関数
+        function stopAllAudio() {
+            nijiAudio.pause();
+            nijiAudio.currentTime = 0;
+            fishAudio.pause();
+            fishAudio.currentTime = 0;
+            coeAudio.pause();
+            coeAudio.currentTime = 0;
+        }
+        
+        // 再生終了時の処理
+        [nijiAudio, fishAudio, coeAudio].forEach(audio => {
+            audio.addEventListener('ended', function() {
+                playStatus.classList.remove('show-status');
+            });
+        });
+        
+        // テキストハイライトアニメーション
+        function highlightText() {
+            scriptText.style.animation = 'none';
+            setTimeout(() => {
+                scriptText.style.animation = 'highlight 2s ease-out';
+            }, 10);
+        }
+    });
+</script>
+</html> 
