@@ -1,0 +1,249 @@
+/* 基本スタイル */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+}
+
+/* フィルター領域 - コンパクトなアイコン付きボタン */
+.filter-compact-design {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    padding: 15px 0;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+    border-bottom: 1px solid #eee;
+}
+
+.filter-compact-container {
+    display: flex;
+    justify-content: center;
+    background-color: #f8f9fa;
+    border-radius: 50px;
+    padding: 5px;
+    max-width: 680px;
+    margin: 0 auto;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.filter-compact-design .filter-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 50px;
+    background-color: transparent;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+}
+
+.filter-compact-design .filter-btn .icon {
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+.filter-compact-design .filter-btn.active {
+    background-color: #3498db;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.filter-compact-design .filter-btn:hover {
+    transform: none;
+}
+
+/* テーブル関連 */
+.voices-table {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.voices-table th, .voices-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.voices-table th {
+    background-color: #f8f9fa;
+    position: sticky;
+    top: 60px;
+    z-index: 5;
+}
+
+.voices-table th[scope="col"] {
+    width: 30%;
+}
+
+.voices-table th[scope="row"] {
+    width: 10%;
+    font-weight: normal;
+}
+
+/* セル内要素 */
+.cell-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.stars-container {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+}
+
+.star-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #ccc;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.star-btn.rated {
+    color: #f1c40f;
+}
+
+.star-btn:hover {
+    transform: scale(1.2);
+}
+
+/* ピックアップされたセル */
+td[data-picked="true"] {
+    background-color: #e9f7ff;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .voices-table th[scope="col"] {
+        font-size: 14px;
+    }
+    
+    .filter-btn {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .voices-table {
+        font-size: 12px;
+    }
+    
+    .voices-table th, .voices-table td {
+        padding: 8px 4px;
+    }
+    
+    .star-btn {
+        font-size: 20px;
+    }
+    
+    .play-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+}
+
+/* モーダル */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 90%;
+    width: 400px;
+}
+
+.modal-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.modal-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* アクセシビリティ向上のためのフォーカス表示 */
+td:focus, button:focus {
+    outline: 2px solid #3498db;
+    outline-offset: -2px;
+}
+
+/* キーボードフォーカス時のスタイル */
+td[tabindex="0"]:focus {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+/* スクリーンリーダー用の非表示テキスト */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* 音声プレーヤーのスタイル削除 */
+/*
+#audio-player {
+    width: 100%;
+    margin-top: 15px; 
+    display: block; 
+}
+*/
+
+/* 各セル内のオーディオプレーヤーのスタイル */
+.cell-audio-player {
+    width: 100%;
+    max-width: 200px;
+    margin-top: 5px;
+} 

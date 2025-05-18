@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音声バージョン比較評価ツール</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>音声バージョン比較評価ツール</h1>
+
+    <!-- フィルター領域 -->
+    <div class="filter-compact-design">
+        <div class="filter-compact-container">
+            <button class="filter-btn active" data-filter="all"><span class="icon">🔍</span> 全表示</button>
+            <button class="filter-btn" data-filter="ayaharmony"><span class="icon">⭐</span> Aya-H</button>
+            <button class="filter-btn" data-filter="ayantry"><span class="icon">⭐</span> Aya-T</button>
+            <button class="filter-btn" data-filter="natsumism"><span class="icon">⭐</span> Natsu</button>
+        </div>
+    </div>
+
+    <!-- 音声テーブル -->
+    <table class="voices-table">
+        <thead>
+            <tr>
+                <th scope="col">音声</th>
+                <th scope="col" data-version="ayaharmony">Ayaharmony</th>
+                <th scope="col" data-version="ayantry">Ayantry</th>
+                <th scope="col" data-version="natsumism">Natsumism</th>
+            </tr>
+        </thead>
+        <tbody id="voices-tbody">
+            <!-- JavaScriptで動的に生成されます -->
+        </tbody>
+    </table>
+
+    <!-- ステータス表示を削除 -->
+    <!-- 
+    <div class="status-container">
+        <span id="star-count">⭐総評価: 0</span>
+    </div>
+    -->
+
+    <!-- 決定ボタンを削除 -->
+    <!--
+    <div class="decision-btn-container">
+        <button class="decision-btn">決定</button>
+    </div>
+    -->
+
+    <!-- 完了モーダル -->
+    <div class="modal" id="completion-modal">
+        <div class="modal-content">
+            <div class="modal-title">選択完了</div>
+            <p>音声選択が完了しました！</p>
+            <div id="selection-result"></div>
+            <button class="modal-btn" onclick="document.getElementById('completion-modal').style.display = 'none'">閉じる</button>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html> 
