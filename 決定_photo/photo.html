@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>決定_photo ギャラリー</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #fafafa;
+      margin: 0;
+      padding: 2em;
+    }
+    h2 {
+      margin-top: 2em;
+      margin-bottom: 0.5em;
+      font-size: 1.2em;
+      color: #444;
+    }
+    .gallery-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 2em;
+    }
+    .item {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      padding: 12px;
+      text-align: center;
+      width: 220px;
+      cursor: pointer;
+      transition: box-shadow 0.2s;
+    }
+    .item:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .item img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .caption {
+      font-size: 0.95em;
+      color: #333;
+      word-break: break-all;
+    }
+    /* モーダル用 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal-content {
+      background: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      max-width: 90vw;
+      max-height: 90vh;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.3);
+      position: relative;
+      text-align: center;
+    }
+    .modal-content img {
+      max-width: 80vw;
+      max-height: 70vh;
+      border-radius: 8px;
+    }
+    .modal-close {
+      position: absolute;
+      top: 8px;
+      right: 16px;
+      font-size: 2em;
+      color: #888;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>決定_photo ギャラリー</h1>
+
+  <h2>ナツミズム</h2>
+  <div class="gallery-row">
+    <div class="item" onclick="openModal('ナツミズム_ss.PNG')">
+      <img src="ナツミズム_ss.PNG" alt="ナツミズム_ss.PNG">
+      <div class="caption">ナツミズム_ss.PNG</div>
+    </div>
+    <div class="item" onclick="openModal('ナツミズム_s.png')">
+      <img src="ナツミズム_s.png" alt="ナツミズム_s.png">
+      <div class="caption">ナツミズム_s.png</div>
+    </div>
+    <div class="item" onclick="openModal('ナツミズム.png')">
+      <img src="ナツミズム.png" alt="ナツミズム.png">
+      <div class="caption">ナツミズム.png</div>
+    </div>
+  </div>
+
+  <h2>アヤハモニー</h2>
+  <div class="gallery-row">
+    <div class="item" onclick="openModal('アヤハモニー_s.png')">
+      <img src="アヤハモニー_s.png" alt="アヤハモニー_s.png">
+      <div class="caption">アヤハモニー_s.png</div>
+    </div>
+    <div class="item" onclick="openModal('アヤハモニー_g.png')">
+      <img src="アヤハモニー_g.png" alt="アヤハモニー_g.png">
+      <div class="caption">アヤハモニー_g.png</div>
+    </div>
+  </div>
+
+  <h2>アヤントリ（w系）</h2>
+  <div class="gallery-row">
+    <div class="item" onclick="openModal('アヤントリ_w4.jpg')">
+      <img src="アヤントリ_w4.jpg" alt="アヤントリ_w4.jpg">
+      <div class="caption">アヤントリ_w4.jpg</div>
+    </div>
+    <div class="item" onclick="openModal('アヤントリ_w3.jpg')">
+      <img src="アヤントリ_w3.jpg" alt="アヤントリ_w3.jpg">
+      <div class="caption">アヤントリ_w3.jpg</div>
+    </div>
+    <div class="item" onclick="openModal('アヤントリ_w2.jpg')">
+      <img src="アヤントリ_w2.jpg" alt="アヤントリ_w2.jpg">
+      <div class="caption">アヤントリ_w2.jpg</div>
+    </div>
+    <div class="item" onclick="openModal('アヤントリ_w1.png')">
+      <img src="アヤントリ_w1.png" alt="アヤントリ_w1.png">
+      <div class="caption">アヤントリ_w1.png</div>
+    </div>
+  </div>
+
+  <div class="gallery-row">
+    <div class="item" onclick="openModal('アヤントリ_s3.png')">
+      <img src="アヤントリ_s3.png" alt="アヤントリ_s3.png">
+      <div class="caption">アヤントリ_s3.png</div>
+    </div>
+    <div class="item" onclick="openModal('アヤントリ_s2.png')">
+      <img src="アヤントリ_s2.png" alt="アヤントリ_s2.png">
+      <div class="caption">アヤントリ_s2.png</div>
+    </div>
+  </div>
+
+  <!-- モーダル -->
+  <div class="modal" id="modal" onclick="closeModal(event)">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal(event)">&times;</button>
+      <img id="modal-img" src="" alt="拡大画像">
+      <div id="modal-caption" class="caption"></div>
+    </div>
+  </div>
+
+  <script>
+    function openModal(src) {
+      document.getElementById('modal-img').src = src;
+      document.getElementById('modal-caption').textContent = src;
+      document.getElementById('modal').classList.add('active');
+    }
+    function closeModal(event) {
+      if (event.target.classList.contains('modal') || event.target.classList.contains('modal-close')) {
+        document.getElementById('modal').classList.remove('active');
+        document.getElementById('modal-img').src = '';
+        document.getElementById('modal-caption').textContent = '';
+      }
+    }
+  </script>
+</body>
+</html> 
